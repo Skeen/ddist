@@ -1,0 +1,50 @@
+\title{\huge Distribuerede Systemer \\
+       \small Afleveringsopgave - 2 }
+\author{Hold: DA4; Gruppe: 2\\ \\
+        \href{mailto:skeen@cs.au.dk}{Emil Madsen - 20105376}\\
+        \href{mailto:emray@cs.au.dk}{Rasmus - 20105109}\\
+        \href{mailto:sverre@cs.au.dk}{Sverre - 20083549}
+       }
+\date{\today}
+
+\maketitle
+
+\hrule
+
+\section*{Overblik}
+
+Vi har implementeret et objectorienteret design af en bank på en Java server.
+
+\begin{figure}[htb]
+\center
+\includegraphics[width=\textwidth]{bankUML}
+\caption{UML for Simpel bankapplikation}
+\end{figure}
+
+Man kan kommunikere med banken vha. vores implementation af RPC\footnote{RPC:
+Remote Procedure Call}.
+
+Denne rapport prøver at dække det følgende:
+\begin{itemize*}
+\item Vores protokol til at kommunikere med serveren (encoding format)
+\item Vores testmetode og data
+\item Hvordan serveren håndterer det at oversætte klientkommunikationen til kald af Java objekter.
+\end{itemize*}
+Som i den tidligere aflevering er der vedlagt et Ant build script. 
+
+Kør blot 'ant server' for at komme igang og se evt. Appendix A for yderligere
+inspiration i form af et trace af en testsession.
+
+\newpage
+\section*{Protokol (Encoding Format)}
+ \input{ 1_protocol.tex }
+\section*{Testmetode og data}
+ \input{ 2_testmetode.tex }
+\section*{Serverens konvertering af Request-URI'en }
+ \input{ 3_metodeafsendelse.tex }
+
+\newpage
+\section*{Appendix A \\
+    \small Dette er et trace af en af vores test-sessioner: 
+}
+\VerbatimInput[frame=leftline,numbers=left,numbersep=3pt,fontsize=\footnotesize]{trace-run.txt}

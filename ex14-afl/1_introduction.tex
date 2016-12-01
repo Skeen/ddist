@@ -1,0 +1,144 @@
+Opgaven vi bliver stillet går ud på at skrive et distributeret java chat
+program, kaldet MultiChat. 
+Programmet skal øge vores evner til at forstå og arbejde med 'message passing
+interfaces'.
+For at løse opgaven er en del kode udleveret.
+
+Denne kode har vi, før vi begyndte at udføre selve opgaven, valgt at
+gennemlæse, for at forstå.
+Vi har i løbet af denne process ændret små ting, som f.eks. at tilføje final og
+lignende.
+Vi har derefter, da vi ville igang med at kode vores løsning, flyttet al den
+udleverede kode ind i en pakke kaldet 'multicastqueue'.
+For at dette skulle virke har vi været nødt til at tilføje public til
+klasserne, således at de kan tilgås uden for den specifikke pakke.
+
+Vi har valgt at kode vores version af MultiChat, vha. to primære tråde, hvor
+den ene håndterer input (at læse brugerens input, samt at sende det), og den
+hvor den anden tråd sørger for output (altså at læse indkomne beskeder og
+skrive dem til skærmen). 
+Dette giver os nem forståelig kode, hvor ansvarene er pænt opdelt.
+
+De følgende krav var stillet til MultiChat-programmet;
+\begin{enumerate*}
+\item Hvis programmet startes uden argumenter, skal det starte en ny gruppe,
+    med sig selv som eneste bruger.
+\item Hvis programmet startes med et enkelt argument, skal dette argument
+tolkes som navnet på en vært, som er en del af en MultiChat gruppe, hvorefter
+programmet skal blive en del af denne gruppe.
+\item Hvis programmet modtager input strengen 'exit <ENTER>' skal det forlade
+gruppen, og terminere.
+\item Når en instans af programmet lukkes ned, skal det lukkes fuldstændigt,
+    det må altså ikke fungere som server for systemet. Dette gælder selvom,
+    denne specifikke maskine startede den aktuelle gruppe. Altså må systemet
+    ikke benytte sig af en central server.
+\item Når en instans af programmet opretter forbindelse til en gruppe,
+    forventes det, at al tidligere chat udskrives til terminalen.
+\end{enumerate*}
+
+I vores kode har vi opnået disse mål på følgende måder;
+\begin{enumerate*}
+\item I main metoden af programmet tjekkes antallet af argumenter til
+programmet. 
+Hvis dette er nul, kaldes 'MulticastQueue.createGroup()', med programmets
+default-port\footnote{Vi har indstillet \proc{default-port} til at være 0, hvilket betyder styresystemet angiver en port. Dette tillader os at køre flere instanser af MultiChat-programmet fra den samme pc.}, hvorefter programmet går til hovedløkken (chat-delen).
+\item Hvis vi derimod finder mindst 1 argument i main metoden, antager vi at
+første argument er et hostname, hvorefter vi parser strengen for at isolere
+portnummer og værtsstreng.
+Når disse er fundet kalder vi 'MulticastQueue.joinGroup()' med de givne
+parametre, hvorefter programmet (efter koden for krav-5) går til hovedløkken.
+\item I hovedløkken oprettes som tidligere nævnt to tråde.
+Krav 3 er fuldkommen indeholdt i input-tråden, hvor vi simpelthen blot tjekker
+den givne input tråd imod strengen 'exit <ENTER>' og hvis et match findes
+disconnecter og terminerer programmet.
+\item Dette krav er opfyldt for os, da MulticastQueue sikrer en distributeret
+messageQueue.
+Altså kan vi blot disconnecte og kanalen forbliver intakt.
+\item Det er her den egentlige opgave ligger.
+\subparagraph*{\footnotesize (ændret i genafleveringen )}
+Vi har for at opfylde kravet lavet en Multicast-QueueHistoryDecorator-klasse,
+som giver ekstra funktionalitet og ellers bare fører metodekald videre til en
+MulticastQueueFifoOnly instans.
+
+Der bruges en speciel streng som payload i en MulticastMessagePayload, hvilken
+er afsendt af MultiChat klassen, og denne håndteres af HistoryDecoratorens'
+get() metode, men bliver ikke returneret.
+
+Denne specielle besked bliver multicastet til alle på netværket og indeholder
+en retur addresse, som alle peers vil oprette en PointToPointQueue til for at
+sende en MulticastMessagePayload med en arrayliste over alle tidligere
+beskeder.
+Afsenderen vil tage imod den første sådanne besked og behandle de indeholdte beskeder.
+\end{enumerate*}
+
+Den generelle chat-klient er, som tidligere nævnt, implementeret vha. to simple
+tråde, hvor input-tråden blot læser brugerens input og sender det via message
+systemet, og hvor output-tråden blot læser fra message-systemet og skriver til
+skærmen.
+Vi mente den oplagte løsning var to tråde, da vi havde behov for at
+udføre to blokerende IO kald samtidigt.
+
+Således er alle de givne 5 punkter løst i følge med opgavebeskrivelsen, og vi
+har, som opgaven specificerer, udelukkende gjort brug af det udleverede kode,
+til kontakten imellem klienterne.
+
+\subsection*{Note}
+
+Vi har udover al det tidligere nævnte også lavet et par små interface-ændringer
+i det udleverede kode.
+Helt specifikt har vi ændret 'PointToPointQueueReceiverEnd.listenOnPort(port)'
+til at returnere en integer i stedet for void, da vi således har kunnet ændre
+internt i 'MulticastQueueFifoOnly' for at denne automatisk kan finde en port,
+hvis den gives '0' som port-argument\footnote{I det indleverede kode er
+default-porten 0, således at chat clienten blot starter på en tilfældig fri
+port}.
+ 
+
+\subsection*{Klasse beskrivelse}
+
+\begin{figure*}[htb]
+\center
+\includegraphics[width=0.74\textwidth]{uge3_threads}
+\caption{Skitse af vores design med 2 tråde og persistent history.}
+\end{figure*}
+
+Vores kode består af 4 nye klasser, som følger:
+
+\begin{description}
+\item[MultiChat]
+Dette er 'main'-klassen.
+Den opretter de relevante objecter og starter Input- og OutputThread.
+
+Den indeholeer desuden delte resourser, som tilgåes static såsom Arraylisten
+History, vores brugte portnumre og hostnavn.
+
+Hvis man joiner en gruppe, er det også MultiChat, der laver anmodning om
+History fra peers, efter at man har sluttet sig til et netværk men før io-trådene startes.
+
+Til sidst vil denne foresøge at joine InputThread, så kørslen kan afsluttes, når
+inputtråden synes.
+
+\item[InputThread]
+Denne læser strenge fra konsollen via System.in og venter(/blokeres) indtil et linjeskift forekommer.
+Den ignorerer tomme strenge og afsluttes, hvis brugeren skriver "exit <Enter>".
+
+Alle ikke-tomme strenge, der læses fra konsollen, som ikke er et exit, bliver sat i MulticastQueue via put().
+
+
+\item[OutputThread]
+Output læser fra queue via get() og tjekker om en message er en instans af de 3
+kendte message typer.
+I det tilfælde lægges den i History-listen og en
+passende besked skrives til konsollen.
+
+
+\item[MulticastQueueHistoryDecorator]
+Implementerer MessageQueue-interfacet og opfylder det ved at indeholde et
+MulticastQueueFifoOnly object og passere alle metodekald til det. 
+
+Den eksisterer kun for at lave speciel behandling af anmoodninger for gammel
+history, hvilket alt sammen blot findes i dens get()-metode.
+
+Anmodninger om history bliver ikke returneret, den prøvet i stedet at lave
+get() på sin underlæggende queue en gang til.
+\end{description}

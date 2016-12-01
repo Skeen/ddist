@@ -1,0 +1,2 @@
+Testing the time of sending 100 messages and then for each peer receive them all
+7 peers:		FIFO: 128 ms.		

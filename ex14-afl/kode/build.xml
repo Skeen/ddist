@@ -1,0 +1,126 @@
+<project name="MultiChat" default="help" basedir=".">
+    <property name="build-directory" value="build"/>
+    <property name="source-directory" value="src"/>
+    <property name="doc-directory" value="doc"/>
+    
+    <!-- Set the following variable in the console,
+         If joining an existing MultiChat group 
+    -->
+    <!--property name="host"/-->
+    
+    <path id="class-path">
+        <pathelement location="${build-directory}"/>
+    </path>
+
+    <target name="help">
+        <echo>
+ Parameters: host: ${host}
+
+ Targets:
+    multichat [-Dhost=hostname]       
+            Starts a MultiChat Group.
+            If -dHost=hostname is specified,
+            tries to connect to existing 
+            group at hostname.
+
+    gui     Same as multichat except is starts a gui
+    cli     MultiChat in Command Line Interface
+
+    buggy   Same as multichat but tries to circumvent 
+            a bug with Ant 1.8.2 on windows.
+            Use this if the cli do not respond.
+    
+    help    Prints this message.
+    build   Builds the source code.
+    clean   Removes all binary data.
+        </echo>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build-directory}"/>
+    </target>
+
+    <target name="prepare-build">
+        <mkdir dir="${build-directory}"/>
+    </target>
+
+    <target name="prepare-doc">
+        <mkdir dir="${doc-directory}"/>
+    </target>
+
+    <target name="build" depends="prepare-build">
+        <javac srcdir="${source-directory}"
+               destdir="${build-directory}"
+               includeantruntime="true">
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <!--Uses java 1.6 to build the source. -->
+    <target name="build6" depends="prepare-build">
+        <javac srcdir="${source-directory}"
+               destdir="${build-directory}"
+               includeantruntime="true"
+               target="1.6" source="1.6">
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="multichat" depends="join,create"/>
+    <target name="mc" depends="multichat"/>
+
+    <target name="join" depends="check-host-state,build" if="is-host-set?">
+        <echo message="Host:${host}"/>
+        <java classname="MultiChat" fork="true">
+            <classpath refid="class-path"/>
+            <arg value="${host}"/>
+        </java>
+    </target>
+
+    <target name="create" depends="check-host-state,build" unless="is-host-set?">
+        <java classname="MultiChat" fork="true">
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <target name="check-host-state">
+        <condition property="is-host-set?">
+            <isset property="host"/>
+        </condition>
+    </target>
+
+    <target name="doc" depends="prepare-doc">
+        <javadoc sourcepath="${source-directory}"
+                 destdir="${doc-directory}"
+                />
+    </target>
+        
+    <target name="gui" depends="build">
+        <java classname="MultiChatGUI" fork="true"> 
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <target name="cli" depends="build">
+        <java classname="MultiChat" fork="true"> 
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <!-- Circumvent the bug -->
+    <target name="buggy" depends="joinb,createb"/>
+
+    <target name="joinb" depends="check-host-state,build" if="is-host-set?">
+        <echo message="Host:${host}"/>
+        <java classname="MultiChat" fork="false">
+            <classpath refid="class-path"/>
+            <arg value="${host}"/>
+        </java>
+    </target>
+
+    <target name="createb" depends="check-host-state,build" unless="is-host-set?">
+        <java classname="MultiChat" fork="false">
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+</project>

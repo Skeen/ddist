@@ -1,0 +1,93 @@
+Hvis man ønsker at teste vores kode er der flere måder at gøre det på.
+\begin{enumerate}
+\item[1] Starte flere instanser af programmet på forskellige fh.cs.au.dk
+maskiner, og forbinder dem, vha. den udskrevne information.
+\item[2] Starte flere instanser af programmet på samme fh.cs.au.dk maskine, og
+forbinde dem, vha. den udskrevne information (dette kræver defaultport=0).
+\item[3] Samme som overstående, blot på en lokal maskine.
+\footnote{Vi kan desværre ikke give en garanti for at programmet vil virke på
+den lokale maskine.
+Hverken hvis kun en klient køres, eller flere klienter køres samtidig.}
+\end{enumerate}
+
+Nedenstående vejledning, henviser til måde nummer $1$ samt $2$. 
+Den $3$'je måde er på eget ansvar, og derfor udleveres ingen vejledning for den
+her.
+\newline
+Note: Vores gui antager at man har Apache Ant og Java installeret på sin
+maskine.
+
+\subsubsection*{Få koden over på fh.cs.au.dk}
+Det første, der skal sikres som led i at teste vores kode, er at få koden gjort
+tilgængelig på fh.cs.au.dk.
+Herunder er et eksempel på hvordan dette kan opnås vha. scp, såfremt en ssh
+konfiguration er udført:
+\begin{verbatim}
+cd kode/
+scp -r . username@fh.cs.au.dk:MultiChat
+\end{verbatim}
+Før dette udføres skal man dog sikre, at mappen MultiChat findes i
+'~/MultiChat/'. 
+For at oprette denne, i tilfælde at den ikke findes i forvejen kan man udføre
+følgende sekvens af handlinger;
+\begin{verbatim}
+ssh username@fh.cs.au.dk
+mkdir MultiChat
+\end{verbatim}
+
+\subsubsection*{At komme til kodens root directory}
+Vi antager nu at koden ligger externt på fh.cs.au.dk, i '~/MultiChat/',
+vi kan få en terminal til denne folder ved at udføre følgende sekvens af
+handlinger;
+\begin{verbatim}
+ssh username@fh.cs.au.dk
+cd MultiChat/
+\end{verbatim}
+
+\subsubsection*{'Create' chatgruppe}
+Vi antager at man står i kodens rodfolder, altså i mappen hvor filen
+'build.xml' ligger.
+Vi kan da oprette en MultiChat-gruppe ved at køre kommandoen:
+\begin{verbatim}
+ant multichat
+\end{verbatim}
+Dette kompilerer koden, sætter classpath og opstarter en instans af
+programmet, der altså starter en lokal MultiChat-gruppe på programmets
+defaultport.
+
+\subsubsection*{'Join' af chatgruppe}
+Vi antager igen at man står i kodens rodfolder.
+Man kan da join'e en gruppe ved følgende kommando:
+\begin{verbatim}
+ant multichat -Dhost=HOSTNAME:HOSTPORT
+\end{verbatim}
+Hvor \proc{hostname} og \proc{hostport} udskiftes med hostname og port, for den
+MultiChat-gruppe, som man ønsker at forbinde sig til.
+Hostport er optional og programmet kontakter til default-port, hvis ingen
+hostport gives\footnote{Der kan være problemer med at
+programmet ikke udskriver sin IP korrekt. Send da en besked, og aflæs hostname
+og port fra denne} \footnote{Se under konklusionen om problemer med IP-adressen.}.
+
+Hvis man ønsker det, kan man join'e et vilkårligt antal klienter til den samme
+gruppe og tjekke at dette virker (Notér dog, at programmet kun er manuelt
+testet med 5 samtidige chatklienter).
+
+\subsection*{Brug af chat-clienten}
+Chat clienten er nem at bruge. 
+Det giver næsten sig selv: man skriver blot en besked efterfulgt af enter,
+hvorefter beskeden sendes til samtlige tilsluttede peers og printes til
+konsollen.
+
+Når man er færdig med at chatte, sendes beskeden '\verb+exit <ENTER>+',
+hvorefter klienterne begynder at lukke forbindelserne til den lokale
+MultiChat-klient på en kontrolleret måde (Der sikre at tråde lukkes korrekt og
+lignende). 
+Hvis der er problemer med at lukke klienten på denne måde, kan den dræbes på
+sædvanlig vis, \verb+C_c+.
+
+Et oplagt forsøg at lave, er at starte en MultiChat-gruppe, join'e gruppen med
+nogle andre peer's og så afbryde maskinen der startede gruppen.
+Derefter er det bare at tjekke at kanalen stadig fungerer.
+Således kan man altså tjekke at systemet ikke bruger en central-server.
+
+Til inspiration kan en session med 3 peers foregå som angivet til sidst i opgavebeskrivelsen.

@@ -1,0 +1,122 @@
+<!-- Build file for the RMI program
+
+   This source code is provided WITHOUT ANY WARRANTY either 
+   expressed or implied. You may study, use, modify, and 
+   distribute it for non-commercial purposes. 
+-->
+<project name="RMI" default="help" basedir=".">
+    <property name="build-directory"    value="build"/>
+    <property name="source-directory"   value="src"/>
+    <property name="resource-directory" value="resource"/>
+    <property name="jar-directory"      value="jars"/>
+    <property name="interfaces-jar"     value="${jar-directory}/interfaces.jar"/>
+    <property name="user-directory"     value="user"/>
+
+    <property name="port-number" value="40404"/>
+
+    <property name="server.codebase" value="file:${interfaces-jar}"/>
+    <property name="server.hostname" value="127.0.0.1"/>
+    <property name="server.policy"   value="${resource-directory}/server.policy"/>
+
+    <property name="client.codebase" value="file:${user-directory}"/>
+    <property name="client.policy"   value="${resource-directory}/client.policy"/>
+
+    <path id="class-path">
+        <pathelement location="${build-directory}"/>
+        <pathelement location="${interfaces-jar}"/>
+    </path>
+
+    <target name="rmiregistry">
+        <exec executable="rmiregistry">
+            <arg value="${port-number}"/>
+        </exec>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build-directory}"/>
+        <delete dir="${jar-directory}"/>
+        <delete dir="${user-directory}"/>
+    </target>
+
+    <target name="prepare">
+        <mkdir dir="${build-directory}"/>
+        <mkdir dir="${jar-directory}"/>
+        <mkdir dir="${user-directory}"/>
+    </target>
+
+    <target name="build" depends="compile-src, jar-interfaces, move-usr-code">
+    </target>
+
+    <target name="compile-src" depends="prepare">
+        <javac srcdir="${source-directory}"
+            destdir="${build-directory}"
+            includeantruntime="true"
+            >
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="jar-interfaces" depends="compile-src">
+        <jar jarfile="${interfaces-jar}">
+            <fileset dir="${build-directory}">
+                <include name="interfaces/*.class"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="move-usr-code" depends="compile-src">
+        <copy todir="${user-directory}">
+            <fileset dir="${build-directory}">
+                <include name="client/*.class"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="server" depends="build">
+        <java classname="server.StringServer" fork="true"> 
+            <classpath refid="class-path"/>
+
+            <jvmarg value="-Djava.rmi.server.codebase=${server.codebase}"/>
+            <jvmarg value="-Djava.rmi.server.hostname=${server.hostname}"/>
+            <jvmarg value="-Djava.security.policy=${server.policy}"/>
+
+            <arg value="${port-number}"/>
+        </java>
+    </target>
+
+    <target name="server-divzero" depends="build">
+        <java classname="server.StringServerDivisionByZero" fork="true"> 
+            <classpath refid="class-path"/>
+
+            <jvmarg value="-Djava.rmi.server.codebase=${server.codebase}"/>
+            <jvmarg value="-Djava.rmi.server.hostname=${server.hostname}"/>
+            <jvmarg value="-Djava.security.policy=${server.policy}"/>
+
+            <arg value="${port-number}"/>
+        </java>
+    </target>
+
+    <target name="server-infloop" depends="build">
+        <java classname="server.StringServerInfiniteLoop" fork="true"> 
+            <classpath refid="class-path"/>
+
+            <jvmarg value="-Djava.rmi.server.codebase=${server.codebase}"/>
+            <jvmarg value="-Djava.rmi.server.hostname=${server.hostname}"/>
+            <jvmarg value="-Djava.security.policy=${server.policy}"/>
+
+            <arg value="${port-number}"/>
+        </java>
+    </target>
+
+    <target name="client" depends="build">
+        <java classname="client.StringClient" fork="true"> 
+            <classpath refid="class-path"/>
+
+            <jvmarg value="-Djava.rmi.server.codebase=${client.codebase}"/>
+            <jvmarg value="-Djava.security.policy=${client.policy}"/>
+
+            <arg value="${server.hostname}"/>
+            <arg value="${port-number}"/>
+        </java>
+    </target>
+</project>

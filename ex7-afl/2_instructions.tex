@@ -1,0 +1,83 @@
+Vi har vedhæftet følgende filer:
+
+\begin{verbatim}
+.:
+kode/
+report.pdf
+
+./kode:
+build.xml
+src/
+
+./kode/src:
+WebServer.java
+WebServerThread.java
+\end{verbatim}
+
+\subsection*{Systemkrav}
+Det kræves at man har Apache Ant installeret.
+
+Det anbefales at man bruger Universitetets unix-maskiner, evt. over ssh.
+
+Universitets computere har Ant installeret, men scriptet bruger derudover også 'tar' og 'wget' til at få fat i resourcefilerne\footnote{Opgavebeskrivelsen fortæller hvordan man finder resourcefilerne:
+The files to be served can found in \href{http://www.cs.au.dk/~jbn/dDist2011/FilesToBeServed.tar.gz}.}.
+
+Hvis man ikke har et system med 'tar' og 'wget' kan man selv hente filerne ned og pakke ud så mappen 'FilesToBeServed' ligger ved siden af Ant's build.xml.
+
+Ellers vil Emil gerne kompilere og levere de manglende binære filer.
+
+\subsection*{Ant build-script}
+
+Vi har brugt et Ant build-system til at gøre testene nemme.
+
+Fra mappen 'kode' køres 'ant help', hvorefter en række targets bliver beskrevet.
+Disse targets kan køres vha. Ant således: 'ant <target>'.
+
+Et print af Ant's targets kan ses i Appendix A, linie 3-30.
+
+\subsection*{Test}
+
+En normal test-session kan udføres således:
+\begin{verbatim}
+[sverre@llama14:...]$ ls
+build.xml  src
+[sverre@llama14:...]$ ant test-firefox
+...
+\end{verbatim}
+
+En anden test-session kan foregå således:
+\begin{verbatim}
+[sverre@llama14:...]$ ls
+build.xml  src
+[sverre@llama14:...]$ ant server
+[...lots of prints...]
+server:
+     [java] WebServer Started!
+     [java] Contact this server on the IP address 10.11.82.14:40404
+^Z
+[sverre@llama14:...]$ bg
+[1]+ ant server &
+[sverre@llama14:...]$ chromium-browser 127.0.0.1:40404 &
+\end{verbatim}
+I den sidste session sættes ant til at sove (vha. \verb+C_z+) og derefter til at køre i baggrunden (\verb+$ bg+).
+
+Dette tillader at en vilkårlig browser kan åbnes til at pege på ip-addressen.
+Og man kan desuden også se rapporteringer fra WebServeren om modtagne requests.
+
+\subsubsection*{Efter at serveren er startet og browseren har peget sig ind på den.}
+
+Når internet-browseren er startet kan det tjekkes manuelt at hjemmesiden er oppe at køre.
+
+Derudover kan følgende ting bekræftes:
+\begin{itemize*}
+\item Html modtages og vises som hjemmesider
+\item Links virker og henviser korrekt til Wikipedia
+\item Side 2 virker og viser korrekt alle 3 billeder
+\item Side 3 virker og referencen til pdf'en vises bliver håndteret korrekt af browseren.
+\item Desuden bliver text-filen håndteret korrekt af browseren.
+\end{itemize*}
+
+Følgende virker dog ikke, fordi det ikke er implementeret:
+\begin{itemize*}
+\item Side 4 bliver vist, men post-requesten, gør ikke som beskrevet.
+\end{itemize*}

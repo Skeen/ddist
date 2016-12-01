@@ -1,0 +1,13 @@
+'asynchronous calls' betyder at vi overfører beskeden og venter på svar, når vi
+udfører kaldet, men samtidig også forsætter med andet arbejde.
+  Det betyder altså at vi kommer tilbage til vores egen kode, før vi enlig kan
+være sikre på at beskeden er sendt afsted, vi ved blot at vi på det givne
+tidspunkt har anmodet om at det sker.
+
+Implementeringsmæssigt er det i 'MulticastQueueFifoOnly'-klassen
+implementeret ved at vi lokalt holder en kollektion af objekter, der skal
+sendes, og så blot lægger vores nye besked ind i denne kollektion og fortæller
+en arbejder-tråd internt i 'MulticastQueueFifoOnly' klassen, at den skal
+overføre den.
+Herefter vågner denne tråd op, og går i gang med at sende vores besked over
+netværket.

@@ -1,0 +1,32 @@
+Serveren modtager \proc{get}-requests eller \proc{post}-requests, hvor
+Request-URI'en overholder protokollen\footnote{Bemærk: Vi har prioriteret
+sanitizing af indkommende requests lavt indtil videre. Vær varlig.}. 
+
+Serveren deler Request-URI'en op i de af protokollen specificerede dele:
+\id{class}, \id{object}, \id{method} og derudover en række parametre og
+værdier (\id{arguments}).
+
+Derefter søger den efter det Java klasse-objekt, der matcher
+\id{class}\footnote{Dette foregår ved opslag i classloaderen (register over
+klasser i den lokale JVM)}, 
+
+Den fundne \texttt{klasse} erklærer en række metoder, som ledes igennem for at
+finde den \texttt{metode} der matcher \id{method}.
+
+Serveren holder et map, hvor \id{object} er nøgle til et Java \texttt{objekt}.
+Dette map initialiseres sammen med serveren og vedligeholdes ved tilføjelse af
+flere kontoer/banker (eller fjernelse).
+
+Altså finder serveren det \texttt{objekt}, der matcher med \id{object} i
+mappet, og kalder \texttt{metoden} på \texttt{objektet} med \id{argumenterne}. 
+
+\id{Resultatet} returneres til klienten.
+
+\begin{figure}[htbp]
+\center
+\begin{adjustbox}{max size={.8\textwidth}{.6\textheight}}
+\input{ 3_figure.tex }
+\end{adjustbox}
+\caption{Flow diagram, der viser hvordan serveren konverterer URI-requesten til
+et metodekald.}
+\end{figure}

@@ -1,0 +1,21 @@
+Efter at have kørt koden, er det muligt at læseren har lagt mærke til nogle små
+defekter ved programmet. 
+Dem der er kendt af udviklerne er:
+\begin{itemize}
+\item I tilfælde af at flere peers opretter og afbryder forbindelsen til en
+MultiChat-gruppe, forekommer der gentagelser af 'join'-beskeder i historien.
+\item Der er problemer, hvis man prøver at forbinde til en MultiChat-peer på \verb+localhost+ eller \verb+127.0.0.1+. Brug i stedet IP-adressen som konsollen angiver ved beskeder.
+\end{itemize}
+
+Vi konkluderer at vi har løst opgaven med vores kode i tilfredsstillende grad,
+da vi kan udføre præcis den chat-sekvens som er fremvist i bunden af opgavebeskrivelsen.
+
+\subsubsection*{Late additional note}
+Vi har tilføjet forkortelsen '\verb+ant mc+' for '\verb+ant multichat+'.
+
+Vi har haft en succesfuld testsession over vpn på tværs af OS's (llamaXX og egen windows pc).
+Vi opdagede dog en masse forsinkelse så længe flere peers var forbundet over vpn-forbindelsen.
+
+Derudover har vi arbejdet med et \proc{gui} og \proc{cli}, hvor der dog stadig er lidt problemer.
+Man kan tjekke de forskellige Ant targets vha. '\verb+ant help+.
+

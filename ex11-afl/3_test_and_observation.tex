@@ -1,0 +1,43 @@
+\section*{Test and obseration}
+
+%TODO: Test explanation and results from MulticastQueueOrderTest
+\subsection*{Testing of the ordering}
+ % Develop a test which runs five instances of you implementation and simultaneously
+ % and quickly puts a lot of messages at all five peers.
+ % Let the test check that they arrive in the same total at all peers.
+ % See MulticastQueueFifoOnlyTest.java for inspiration.
+ % Your report must have a section which describes how you did the test, why this
+ % is an appropriate way to do the test, and what the result of the test was.
+
+Testen kørt med Ant via \verb+ant junit+ gennemføres korrekt.
+Vi har testet at MMJoins og MMPayloads kommer frem i samme
+rækkefølge\footnote{Hver test skiller imellem at teste ankomsten af MMJoins og
+MMPayloads.}.
+
+
+%TODO: Test explanation and results from MulticastQueuePerformanceTest
+\subsection*{Testing of the performance of total ordering vs. fifo ordering}
+Testen kørt med Ant via \verb+ant testP+, gennemføres korrekt.
+
+Samtlige testKørsler er vedhæftet.
+Her er et trace af vores bedste testkørsel:
+\VerbatimInput[firstline=76,frame=leftline,fontsize=\small,numbers=left,numbersep=6pt]{trace3.txt}
+
+Vi har oplevet, ved at sætte en maxtid på hvor lang tid vi venter på hvert get
+(udkommenteret i koden), at nogle enkelte MMPayloads tager over 20 sekunder at
+få fat i.
+Hvis vi ikke indfører denne max-tid, kan get fortsætte med at blokere i flere 
+timer.
+
+Det er evt. et problem med manglende portbinding.
+
+Dette er fortsat et uafklaret problem.
+
+% Vi har derfor udtaget en testkørsel, hvor vi var 'heldige' at der ikke var nogle blokeringer.
+
+Vi har ikke været i stand til at finde en enkelt testkørsel med 3 eller flere
+datapunkter, når vi sender 100 beskeder.
+
+Vi har prøvet at nøjes med at sende 1 og 10 beskeder.
+Resultatet er vedhæftet i appendix.
+

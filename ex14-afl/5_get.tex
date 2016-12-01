@@ -1,0 +1,9 @@
+Det at de er synkrone, betyder blot at vi modtager beskeden og venter på svar,
+når vi udfører kaldet. 
+Vi sidder altså blot og venter på at den ønskede besked kommer ind.
+
+Implementeringsmæssigt er det implementeret i 'MulticastQueueFifoOnly'-klassen
+ved at vi blot sætter os i kø for at modtage en besked, og så bliver vi låst,
+indtil en besked kommer ind (Dette sker når en intern modtager-arbejder-tråd har
+modtaget en besked). 
+Herefter kan vi få beskeden, og komme tilbage til vores egen kode.

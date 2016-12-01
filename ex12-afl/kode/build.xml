@@ -1,0 +1,135 @@
+<project name="multicastqueue" default="help" basedir=".">
+    <property name="build-directory" value="build"/>
+    <property name="source-directory" value="src"/>
+    <property name="test-directory" value="test"/>
+    <property name="doc-directory" value="doc"/>
+    <property name="junitjar" value="lib/junit-4.4.jar"/>
+
+    <path id="class-path">
+        <pathelement location="${build-directory}"/>
+        <pathelement location="${junitjar}"/>
+    </path>
+
+    <target name="help">
+        <echo>
+Properties:
+    host: ${host}
+    arg: ${arg}
+
+Targets:
+    junit   JUnit Test of multicastQueueTotal
+    test    Alike, but no dependencies on JUnit. (buggy)
+
+    testP   MulticastQueuePerformance
+    testR   RestIteratorTest
+
+    help    Prints this message.
+    build   Builds the source code.
+    clean   Removes all binary data.
+        </echo>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build-directory}"/>
+    </target>
+
+    <target name="prepare-build">
+        <mkdir dir="${build-directory}"/>
+    </target>
+
+    <target name="prepare-doc">
+        <mkdir dir="${doc-directory}"/>
+    </target>
+
+    <target name="build" depends="build-test,build-src"/>
+
+    <target name="build-src" depends="prepare-build">
+        <javac srcdir="${source-directory}"
+               destdir="${build-directory}"
+               includeantruntime="false">
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="build-test" depends="build-src">
+        <javac srcdir="${test-directory}"
+               destdir="${build-directory}">
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="build6" depends="prepare-build">
+        <echo message="Compiling with java 1.6"/>
+        <javac srcdir="${source-directory}"
+               destdir="${build-directory}"
+               includeantruntime="true"
+               target="1.6" source="1.6">
+            <classpath refid="class-path"/>
+        </javac>
+        <javac srcdir="${test-directory}"
+               destdir="${build-directory}"
+               includeantruntime="true"
+               target="1.6" source="1.6">
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="doc" depends="prepare-doc">
+        <javadoc sourcepath="${source-directory}"
+                 destdir="${doc-directory}" />
+    </target>
+
+    <target name="junit" depends="build">
+            <java classname="tools.FilterTestRunner">
+                    <arg value="MulticastQueueOrderJUnitTest"/>
+                    <classpath refid="class-path"/>
+            </java>
+    </target>
+
+    <target name="test" depends="build">
+        <java classname="MulticastQueueOrderTest">
+            <classpath refid="class-path"/>
+            <arg value="total"/>
+        </java>
+    </target>
+
+    <target name="testP" depends="build">
+        <java classname="MulticastQueuePerformanceTest">
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <target name="testR" depends="build">
+        <java classname="RestIteratorTest"> 
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <target name="mc" depends="buggy">
+        <java classname="MultiChat"> 
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <target name="check-host-state">
+        <condition property="is-host-set?">
+            <isset property="host"/>
+        </condition>
+    </target>
+
+    <target name="buggy" depends="joinb,createb"/>
+
+    <target name="joinb" depends="check-host-state,build" if="is-host-set?">
+        <echo message="Host:${host}"/>
+        <java classname="MultiChat" fork="false">
+            <classpath refid="class-path"/>
+            <arg value="${host}"/>
+        </java>
+    </target>
+
+    <target name="createb" depends="check-host-state,build" unless="is-host-set?">
+        <java classname="MultiChat" fork="false">
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+</project>

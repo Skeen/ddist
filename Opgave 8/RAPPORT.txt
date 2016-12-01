@@ -1,0 +1,28 @@
+Vores test er udført som følger;
+En timer startes når serveren modtager den første request, fra dette tidspubnkt
+køre serveren i 10 sekunder, og antallet af clienter vi når at servicere tælles,
+vi måler dette tal, hhv. ved single threaded og multithreaded.
+
+Til at udføre målingen, og lave requests bruger DDoS værktøjet LOIC (Low Orbit
+Ion Cannon), der stresser serveren til maksimum, vi vil køre begge tests med 100
+tråde, det tilsvare groft sagt 100 browsers der konstant refresher;
+
+På 10sekunder fik vi følgende resultater;
+Single threaded:    6402 clients served
+Multi threaded:     17814 clients served
+
+Vi nåede ikke på nogle af disse tests, at få LOIC op på fuldudnyttelse, derfor
+vil vi forsøge at lave en lidt længere test.
+
+På en længere test 100sekunder fi vi følgende resultater;
+Single threaded:    73959 clients served
+Multi threaded:     210022 clients served
+
+Det lykkedes i denne test at få LOIC op på fuldudnyttelse. 
+Derfor også den lidt over 10dobbelte stigning, i begge tests.
+
+Note: I samtlige tests blev blot 'index.html' siden overført.
+
+Mht. antallet af tråde i den multithreaded, I vores server, er antallet af tråde
+ikke begrænset, men man kan forestille sig at performence stigere så længere der
+er mere tilgængelig processorkræft og/eller netværks båndbredte.

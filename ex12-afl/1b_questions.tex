@@ -1,0 +1,14 @@
+Derudover skulle vi besvare følgende spørgsmål;
+
+\subsubsection*{1. Do your implementation tolerate that two servers without
+clients leave at the same time? Why / Why not? }
+Da det eneste, der forbinder vores servere, er multicastqueuen, og da denne
+nemt kan afbryde forbindelsen, også concurrently, kan det sagtens lade sig gøre
+at afbryde forbindelsen fra to servere samtidig.
+
+\subsubsection*{2. Do your implementation implement the semantics of an atomic
+section? If it does, how did you implement it?}
+Vi har ikke implementeret atomic section, men vi kunne hurtigt gøre det, ved at
+lave en speciel message type, der blot holder en liste af events, der så
+modtages som én, og dermed også udføres som én.
+

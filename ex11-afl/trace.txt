@@ -1,0 +1,23 @@
+Buildfile: build.xml
+
+prepare-build:
+
+build-src:
+
+build-test:
+
+build:
+
+benchmark:
+     [java] Testing the time of sending 100 messages and then for each peer receive them all
+Buildfile: build.xml
+
+prepare-build:
+
+build-src:
+
+build-test:
+
+build:
+
+benchmark:

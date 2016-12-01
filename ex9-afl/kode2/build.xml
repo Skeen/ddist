@@ -1,0 +1,57 @@
+<!-- Build file for the WebServer
+
+   This source code is provided WITHOUT ANY WARRANTY either 
+   expressed or implied. You may study, use, modify, and 
+   distribute it for non-commercial purposes. 
+-->
+<project name="WebServer" default="help" basedir="." xmlns="">
+    <property name="build-directory" value="build"/>
+    <property name="source-directory" value="src"/>
+
+    <property name="build.compiler.pedantic" value="true"/>
+
+    <path id="class-path">
+        <pathelement location="${build-directory}"/>
+    </path>
+
+    <target name="help">
+        <echo>
+WebServer build management.
+Targets: 
+    server:         Runs the web server and prints the IP-address.
+
+    build:          Builds the web server, and makes it ready to be run
+    clean:          Removes all bytecode
+    help:           Prints this message
+
+    build-src:      Builds the web server from source
+    prepare-build:  Prepares a build directory
+        </echo>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build-directory}"/>
+    </target>
+
+    <target name="prepare-build">
+        <mkdir dir="${build-directory}"/>
+    </target>
+
+    <target name="build" depends="build-src"/>
+
+    <target name="build-src" depends="prepare-build">
+        <javac srcdir="${source-directory}"
+            destdir="${build-directory}"
+            includeantruntime="true"
+            >
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="server" depends="build">
+        <java classname="WebServer"> 
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+</project>

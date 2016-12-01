@@ -1,0 +1,27 @@
+\subsubsection*{Is it possible in your implementation that different users, A
+and B say, sees different orderings of messages sent by two different users, C
+and D say?}
+
+I vores system er dette en mulighed, da beskeder vises i den rækkefølge de
+modtages i. 
+Dette er mest påvirket af netværk-latency, da brugere kan have vidt forskellige
+latency'er i forhold til hinanden.
+
+
+\subsubsection*{If your system has the mentioned problem, then discuss what
+could be done to fix it.}
+    
+En løsning, ville her være at tidsstemple beskederne.
+Således vil man blot kunne printe beskeder i overens stemmelse med
+tidsstemplerne.
+Hvis man antager at samtlige clocks på alle i systemet er perfekt synkroniseret vil dette altså være muligt.
+Men da dette ikke kan lade sig gøre, kan vi blot approksimere det, hvilket
+altså betyder, at en computer, der tidsstempler med $+200ms$, altid vil have
+sine beskeder vist senere end dem, der er helt præcise.
+
+En alternativ løsning vil være at lave en mutex exclusion på at sende beskeder
+i en gruppe, således at kun en besked kan sendes i netværket ad gangen.
+
+En sidste alternativ løsning ville være at udråbe en 'super-peer', der ville
+modtage og fordele samtlige beskeder, således at dennes rækkefølge af beskeder
+ville blive samtlige modtageres rækkefølge.

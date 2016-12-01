@@ -1,0 +1,93 @@
+\subsection*{Kompilering}
+Ant can bruges til at kompilere koden. 
+Derefter kan man bruge java i terminalen fra build folderen.
+
+Dvs. man kan starte vores regne server med 'java ServerTUIDistributed' og
+clienten kan startes med 'java ClientTUI'
+
+Eksempel for at kompilere og køre i Windows:
+\begin{verbatim}
+...\kode>ant build
+Buildfile: ...\kode\build.xml
+
+prepare-build:
+
+build-src:
+
+build-test:
+    [javac] ...
+
+build:
+
+BUILD SUCCESSFUL
+Total time: 0 seconds
+
+...\kode>cd build
+
+...\kode\build>java ServerTUIDistributed
+Exit: Gracefully logs out
+Crash: Makes the server crash.
+
+Enter address of another server (ENTER for standalone):
+\end{verbatim}
+
+Alternativt, kan man køre de to bash scripts 'server.sh' og 'client.sh' for at
+køre de tilsvarende TUI's.
+
+Når en server startes, er der en forespørgsel om en server-adresse.
+Hvis man undlader at skrive en adresse og blot trykker ENTER, vil serveren lave
+en gruppe self.
+
+For at forbinde til en eksisterende gruppe af servere skal man indtaste
+\verb+<address>:<port>+.
+
+Da porte oprettes dynamisk, skal man være opmærksom på at forbinde til den
+server port, som er blevet bundet i den kendte peer.
+ 
+I ClientTUI bliver man ligeledes spurgt om en server adresse.
+Her skal man igen bruge \verb+<address>:<port>+.
+% Todo : cleanup the following (duplicated?)
+Bemærk at dette er en anden port end 'server til server' porten.
+
+
+\subsection*{Server opsætning}
+Den første server der startes (den der skal lave server gruppen), skal ikke
+gives noget argument, ved beskeden;
+\begin{verbatim}
+Enter address of another server (ENTER for standalone):
+\end{verbatim}
+Her skal vi altså simpelt nok bare klikke '<ENTER>'.
+
+For en server der skal joine en server gruppe, skal vi på givne tidspunkt skrive
+server group addressen på den server vi ønsker at joine her; Denne findes nemt
+ved at læse outputtet fra en allerede kørende server, og ser noglelunde således
+ud;
+\begin{verbatim}
+...
+Created/Joined server group at: llama04/10.11.82.4:53261
+...
+\end{verbatim}
+Det er netop denne addresse der skal bruges, til at blive en del af server
+gruppen. Dette skal indtastes med både addresse og navn, på det sædvanlige
+'<address>:<port>' format. Man skal huske at kigge efter beskeden; 'Server
+running', der indikere at serveren nu faktisk køre.
+
+\subsection*{Klient opsætning}
+For at kontakte til en server med en client skal man således også kende noget
+information fra serveren, nemlig på hvilken port, den specifikke server,
+servicere clienter, denne information er ligeledes nem at læse, og ser
+noglelunde således ud;
+\begin{verbatim}
+...
+Listening for clients at: llama04/10.11.82.4:46814
+...
+\end{verbatim}
+I clienten skal denne addresse, skrives på samme format, som tidligere, når
+beskeden;
+\begin{verbatim}
+Enter address of a server:
+\end{verbatim}
+Vises på skærmen, herefter vil clienten udskrive information om, hvorvidt det
+lykkedes at kontakte til serveren eller ej.
+Noter venligst, at client porten, er anderledes en servergroup porten.
+

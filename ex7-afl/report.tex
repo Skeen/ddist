@@ -1,0 +1,55 @@
+\documentclass[10pt, a4paper]{article}
+
+%\usepackage{a4wide}
+\usepackage[pdftex]{graphicx}
+\usepackage{verbatim} 
+\usepackage{ulem}
+\usepackage{hyperref}
+\usepackage[danish]{babel}
+\usepackage{t1enc}
+\usepackage{wrapfig} % wrapper til images (align in tekst)
+\usepackage{amsmath,amssymb} % American Mathematical Society
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage{clrscode} % algoritmer som brugt i bogen CLRS (2nd ed.)
+\usepackage{mdwlist} % tighter lists when starred
+
+% test to reimplement VerbatimInput
+%\usepackage{pdfpages}
+
+
+
+% Italic theta and omega
+\let\OldTheta\Theta
+\renewcommand{\Theta}{\varTheta}
+\let\OldOmega\Omega
+\renewcommand{\Omega}{\varOmega}
+
+% Til linieret kodeeksempler:
+% \VerbatimInput[frame=leftline,numbers=left,numbersep=6pt]{<FILE>}
+% Look at minted package for better code inclusions.
+
+%declare where to look for graphics
+\graphicspath{{gfx/}}
+
+\newenvironment{sbrlist}
+{\begin{description} \itemsep1pt \parskip0pt \parsep0pt}
+{\end{description}}
+
+\newcommand{\sbrbox}[1]
+{\begin{center} \fbox{\begin{minipage}{0.92\linewidth}
+    #1
+\end{minipage}} \end{center}}
+
+\begin{document}
+
+\newcommand{\logInput}[2]{\VerbatimInput[frame=leftline,numbers=left,numbersep=3pt,firstline=#1,lastline=#2]{../DevLog.txt}}
+
+\newcommand{\http}{{\ttfamily HTTP/1.0}}
+\newcommand{\rfcb}{{\ttfamily RFC3778}}
+\newcommand{\rfc}{{\ttfamily RFC1945}}
+ 
+%include everything
+\input{ tally.tex } 
+% that's all folks
+\end{document}

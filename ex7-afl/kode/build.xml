@@ -1,0 +1,129 @@
+<!-- Build file for the WebServer
+
+   This source code is provided WITHOUT ANY WARRANTY either 
+   expressed or implied. You may study, use, modify, and 
+   distribute it for non-commercial purposes. 
+-->
+<project name="WebServer" default="help" basedir=".">
+    <property name="source-directory" value="src"/>
+    <property name="build-directory" value="build"/>
+    <property name="resource-directory" value="FilesToBeServed"/>
+    <property name="resource-file" value="FilesToBeServed.tar.gz"/>
+    <property name="ip-address" value="127.0.0.1:40404"/>
+
+    <property name="build.compiler.pedantic" value="true"/>
+
+    <path id="class-path">
+        <pathelement location="${build-directory}"/>
+    </path>
+
+    <target name="help">
+        <echo>
+WebServer build management.
+Targets: 
+    server:         Runs the webserver and prints the IP-address.
+    test-www:       Starts the webserver in the background and points 
+                    a browser to it.
+    test-firefox:   As test-www but uses firefox.                     
+                    Use this if test-www fails
+
+    build:          Builds the webserver, and makes it ready to be run
+    clean:          Removes all bytecode
+    help:           Prints this message
+
+    build-src:      Builds the webserver from source
+    prepare-build:  Prepares a build directory
+    prepare-res:    Makes sure the resources are downloaded 
+                    and extracted from the tar archive
+    download-res:   Downloads the resources from course website
+    extract-res:    Extracts the resources to ${resource-directory}/
+        </echo>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build-directory}"/>
+        <delete dir="${resource-directory}"/>
+        <delete file="${resource-file}"/>
+    </target>
+
+    <target name="prepare-build">
+        <mkdir dir="${build-directory}"/>
+    </target>
+
+    <target name="build" depends="build-src, prepare-res"/>
+
+    <target name="build-src" depends="prepare-build">
+        <javac srcdir="${source-directory}"
+            destdir="${build-directory}"
+            includeantruntime="true"
+            >
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="prepare-res" depends="download-res, extract-res"/>
+
+    <target name="check-res-state">
+            <!-- Check to see if the resources already are available
+              or if they should be downloaded and/or just extracted -->
+            <condition property="res-ready?">
+                    <available file="${resource-directory}" type="dir"/>
+            </condition>
+            <condition property="res-downloaded?">
+                    <or>
+                            <available file="${resource-file}"/>
+                            <isset property="res-ready?"/>
+                    </or>
+            </condition>
+    </target>
+
+    <target name="download-res" depends="check-res-state" unless="res-downloaded?">
+        <!-- Information about the resource file -->
+        <property name="Server" value="http://www.cs.au.dk/~jbn/dDist2011/"/>
+        <!-- Download the file, if not already downloaded -->
+        <echo> Downloading the resources </echo>
+        <exec executable="wget">
+            <arg value="--no-clobber"/>
+            <arg value="${Server}${resource-file}"/>
+        </exec>
+    </target>
+
+    <target name="extract-res" depends="check-res-state" unless="res-ready?">
+        <!-- Untar the files to the specified directory as necessary-->
+        <echo> Unpacking the resources from archive </echo>
+        <exec executable="tar">
+            <arg value="zxfk"/>
+            <arg value="${resource-file}"/>
+        </exec>
+    </target>
+
+    <target name="server" depends="build">
+        <java classname="WebServer"> 
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <target name="run-bg" depends="build">
+        <echo> Running the server in the background. Please stop it manually, when ready. </echo>
+        <java fork="true" spawn="true" classname="WebServer">
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <target name="test-www" depends="run-bg">
+        <exec executable="www-browser" spawn="true">
+            <arg value="${ip-address}"/>
+        </exec>
+        <echo> Leaving Ant. The browser will remain.</echo>
+        <echo>If the browser do not appear after a short moment, please run 'ant test-firefox' instead. 
+        </echo>
+    </target>
+
+    <target name="test-firefox" depends="run-bg">
+        <exec executable="firefox" spawn="true">
+            <arg value="${ip-address}"/>
+        </exec>
+        <echo> Leaving Ant. The browser will start now.</echo>
+    </target>
+
+</project>

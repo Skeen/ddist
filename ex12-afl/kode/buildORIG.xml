@@ -1,0 +1,124 @@
+<project name="MultiChat" default="help" basedir=".">
+    <property name="build-directory" value="build"/>
+    <property name="source-directory" value="src"/>
+    <property name="test-directory" value="test"/>
+    <property name="doc-directory" value="doc"/>
+    <property name="junitjar" value="lib/junit-4.4.jar"/>
+
+    
+    <!-- Set the following variable in the console,
+         If joining an existing MultiChat group 
+    -->
+    <!--property name="host"/-->
+    
+    <path id="class-path">
+        <pathelement location="${build-directory}"/>
+        <pathelement location="${junitjar}"/>
+    </path>
+
+    <target name="help"><echo>
+Properties:
+    host: ${host}
+    arg: ${arg}
+
+Targets:
+    junit   Junit Test of multicastqueue Total
+    junit2  Same, but output is filtered.
+    test    same, but no dependecies on junit.
+
+    testP   MulticastQueuePerformance
+    testR   RestIteratorTest
+
+    help    Prints this message.
+    build   Builds the source code.
+    clean   Removes all binary data.</echo>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build-directory}"/>
+    </target>
+
+    <target name="prepare-build">
+        <mkdir dir="${build-directory}"/>
+    </target>
+
+    <target name="prepare-doc">
+        <mkdir dir="${doc-directory}"/>
+    </target>
+
+    <target name="build" depends="build-src"/>
+
+    <target name="build-src" depends="prepare-build">
+        <javac srcdir="${source-directory}"
+               destdir="${build-directory}"
+               includeantruntime="false">
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="build-test" depends="build-src">
+        <javac srcdir="${test-directory}"
+               destdir="${build-directory}"
+               includeantruntime="true">
+       <!--includeantruntime should be true as junit is used and placed in ant
+         libraries-->
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <!--Use java 1.6 to build the source. -->
+    <target name="build6" depends="prepare-build">
+        <javac srcdir="${source-directory}"
+               destdir="${build-directory}"
+               includeantruntime="true"
+               target="1.6" source="1.6">
+            <classpath refid="class-path"/>
+        </javac>
+        <javac srcdir="${test-directory}"
+               destdir="${build-directory}"
+               includeantruntime="true"
+               target="1.6" source="1.6">
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="doc" depends="prepare-doc">
+        <javadoc sourcepath="${source-directory}"
+                 destdir="${doc-directory}"
+                />
+    </target>
+
+    <target name="junit" depends="build">
+            <junit>
+                    <classpath refid="class-path"/>
+                    <formatter type="brief" usefile="false"/>
+                    <test name="MulticastQueueOrderTestJunit"/>
+            </junit>
+    </target>
+
+    <target name="junit2" depends="build">
+            <java classname="tools.FilterTestRunner">
+                    <arg value="MulticastQueueOrderTestJunit"/>
+                    <classpath refid="class-path"/>
+            </java>
+    </target>
+
+    <target name="test" depends="build">
+        <java classname="MulticastQueueOrderTest">
+            <classpath refid="class-path"/>
+            <arg value="total"/>
+        </java>
+    </target>
+
+    <target name="testP" depends="build">
+        <java classname="MulticastQueuePerformanceTest">
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <target name="testR" depends="build">
+        <java classname="RestIteratorTest"> 
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+</project>

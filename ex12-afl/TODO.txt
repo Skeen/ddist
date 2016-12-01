@@ -1,0 +1,38 @@
+1. Find ud af hvorfor det ikke virker med TOTAL queue, men fint virker med FIFO quenen.
+2. Skriv en automatisk test, der tjekker;
+
+Monotonic Reads
+
+    If a process reads the value of a data item x, any successive read operation on x by
+    that process will always return the same value or a more recent value
+    
+Monotonic Writes
+
+    a write operation by a process on a data item x is completed before any successive
+    write operation on x by the same process
+    
+Read your writes
+
+    The effect of a write operation by a process on data item x will always be seen by
+    a successive read operation on x by the same process
+    
+Write follow reads
+
+    A write operation by a process on a data item x following a previous read operation
+    on x by the same process is guaranteed to take place on the same or more recent value
+    of x that was read
+
+3. Tjek rapporten igennem;
+    især den nye del, omkring implementationen.
+    elimér duplikat information.
+    der skal beskrives hvilke klasser vi har ændret, og hvordan.
+    man skal kunne forstå implementationen ud fra beskrivelsen.
+    (også uden at kende til det udleverede kode)
+
+4. Skriv afsnit
+    Mere uddybning om hvorfor vi overholder alle fire typer af client-centric
+    consistency. - F.eks. noget med at referere til den automatiske test.
+    Om hvordan den automatiske test køres, hvorfor den er god, osv.
+    
+5. Måske bare aflevere med FIFO queuen, og sige beskeder ikke må komme for
+hurtigt efter hinanden? - da der er et problem med TOTAL queuen endnu.

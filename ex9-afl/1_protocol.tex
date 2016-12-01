@@ -1,0 +1,25 @@
+Vi laver et \http \;(\proc{get}-)request, hvor Request-URI'en skal være formatteret således:
+
+\begin{verbatim}
+/<Class>/<Object>/<Method>?<Param_0>=<value_0>& ... &<Param_i>=<arg_i>
+\end{verbatim}
+ 
+\verb+<Class>+ betegner den relevante klasse, altså f.eks. \verb+Bank+ eller \verb+Account+.
+
+\verb+<Object>+ lader os kende forskel på forskellige instanser af klasser, som
+serveren holder.
+Der kan f.eks. være flere Accounts.
+Bank-klassen har altid 1 som værdi for objektet.
+
+\verb+<Method>+ er den metode man gerne vil kalde.
+Navnene er som beskrevet i UML'en.
+ 
+\verb+<Param_0>=<value_0>+ er parameter til metoden.
+Hvilken skal have samme navn som beskrevet af metoden selv i UML'en.
+Der kan være vilkårligt mange parametre, selvom ingen af bank eller account metoderne bruger mere end en.
+\verb+param_0+ er så navnet på parameteren imf. UML'en, og \verb+value+ er værdien af parameteren.
+
+Vi har tilladt os at afvige fra UML'en på et punkt: 
+Alle metoderne tager kun strenge som argumenter. 
+Hvis det er en double, der skal bruges, skal metoden altså konvertere strengen
+først.

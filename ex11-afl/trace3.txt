@@ -1,0 +1,90 @@
+Testing the time of sending 1 messages and then for each peer receive them all
+1 peers:		FIFO: 1 ms.		TOTAL: 1 ms.
+1 peers:		FIFO: 0 ms.		TOTAL: 1 ms.
+3 peers:		FIFO: 15 ms.		
+
+Testing the time of sending 1 messages and then for each peer receive them all
+1 peers:		FIFO: 2 ms.		TOTAL: 1 ms.
+1 peers:		FIFO: 0 ms.		TOTAL: 1 ms.
+3 peers:		FIFO: 16 ms.		TOTAL: 64 ms.
+3 peers:		FIFO: 5 ms.		TOTAL: 51 ms.
+5 peers:		FIFO: 27 ms.		TOTAL: 179 ms.
+5 peers:		FIFO: 15 ms.		TOTAL: 156 ms.
+7 peers:		FIFO: 17 ms.		
+
+Testing the time of sending 1 messages and then for each peer receive them all
+1 peers:		FIFO: 3 ms.		TOTAL: 1 ms.
+1 peers:		FIFO: 0 ms.		TOTAL: 1 ms.
+3 peers:		FIFO: 18 ms.		TOTAL: 60 ms.
+3 peers:		FIFO: 7 ms.		TOTAL: 67 ms.
+5 peers:		FIFO: 26 ms.		TOTAL: 171 ms.
+5 peers:		FIFO: 16 ms.		TOTAL: 163 ms.
+7 peers:		FIFO: 30 ms.		TOTAL: 427 ms.
+7 peers:		FIFO: 29 ms.		TOTAL: 386 ms.
+9 peers:		FIFO: 29 ms.		TOTAL: 924 ms.
+9 peers:		FIFO: 54 ms.		TOTAL: 953 ms.
+11 peers:		FIFO: 87 ms.		
+
+Testing the time of sending 1 messages and then for each peer receive them all
+1 peers:		FIFO: 1 ms.		TOTAL: 1 ms.
+1 peers:		FIFO: 0 ms.		TOTAL: 1 ms.
+3 peers:		FIFO: 18 ms.		TOTAL: 69 ms.
+3 peers:		FIFO: 7 ms.		TOTAL: 64 ms.
+5 peers:		FIFO: 30 ms.		TOTAL: 177 ms.
+5 peers:		FIFO: 11 ms.		TOTAL: 141 ms.
+7 peers:		FIFO: 37 ms.		TOTAL: 415 ms.
+7 peers:		FIFO: 41 ms.		
+
+Testing the time of sending 1 messages and then for each peer receive them all
+1 peers:		FIFO: 2 ms.		TOTAL: 1 ms.
+1 peers:		FIFO: 0 ms.		TOTAL: 1 ms.
+3 peers:		FIFO: 21 ms.		
+
+Testing the time of sending 1 messages and then for each peer receive them all
+1 peers:		FIFO: 1 ms.		TOTAL: 1 ms.
+1 peers:		FIFO: 0 ms.		TOTAL: 1 ms.
+3 peers:		FIFO: 8 ms.		TOTAL: 60 ms.
+3 peers:		FIFO: 7 ms.		
+
+Testing the time of sending 1 messages and then for each peer receive them all
+1 peers:		FIFO: 2 ms.		TOTAL: 1 ms.
+1 peers:		FIFO: 0 ms.		TOTAL: 1 ms.
+3 peers:		FIFO: 22 ms.		TOTAL: 60 ms.
+3 peers:		FIFO: 5 ms.		
+
+Testing the time of sending 1 messages and then for each peer receive them all
+1 peers:		FIFO: 1 ms.		TOTAL: 0 ms.
+1 peers:		FIFO: 0 ms.		TOTAL: 1 ms.
+3 peers:		FIFO: 15 ms.		TOTAL: 74 ms.
+3 peers:		FIFO: 11 ms.		TOTAL: 59 ms.
+5 peers:		FIFO: 25 ms.		TOTAL: 187 ms.
+5 peers:		FIFO: 11 ms.		TOTAL: 139 ms.
+7 peers:		FIFO: 25 ms.		TOTAL: 442 ms.
+7 peers:		FIFO: 47 ms.		TOTAL: 411 ms.
+9 peers:		FIFO: 70 ms.		TOTAL: 3145 ms.
+9 peers:		FIFO: 51 ms.		TOTAL: 924 ms.
+11 peers:		FIFO: 76 ms.		TOTAL: 3811 ms.
+11 peers:		FIFO: 72 ms.		TOTAL: 3311 ms.
+13 peers:		FIFO: 124 ms.		TOTAL: 4287 ms.
+13 peers:		FIFO: 117 ms.		TOTAL: 4378 ms.
+15 peers:		FIFO: 137 ms.		TOTAL: 10116 ms.
+15 peers:		FIFO: 160 ms.		TOTAL: 10214 ms.
+17 peers:		FIFO: 203 ms.		TOTAL: 14107 ms.
+17 peers:		FIFO: 191 ms.		TOTAL: 13019 ms.
+19 peers:		FIFO: 256 ms.		
+
+Testing the time of sending 100 messages and then for each peer receive them all
+1 peers:		FIFO: 8 ms.		TOTAL: 44 ms.
+1 peers:		FIFO: 3 ms.		TOTAL: 24 ms.
+3 peers:		FIFO: 26 ms.		
+
+Testing the time of sending 100 messages and then for each peer receive them all
+1 peers:		FIFO: 10 ms.		TOTAL: 44 ms.
+1 peers:		FIFO: 3 ms.		TOTAL: 24 ms.
+3 peers:		FIFO: 35 ms.		TOTAL: 19232 ms.
+3 peers:		FIFO: 23 ms.		TOTAL: 72664 ms.
+5 peers:		FIFO: 76 ms.		
+
+Testing the time of sending 100 messages and then for each peer receive them all
+5 peers:		FIFO: 116 ms.		TOTAL: 61734 ms.
+5 peers:		FIFO: 86 ms.		

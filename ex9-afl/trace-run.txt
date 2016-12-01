@@ -1,0 +1,112 @@
+[sverre@llama05:...ex9-afl/kode2]$ ant
+Buildfile: build.xml
+
+help:
+     [echo]
+     [echo] WebServer build management.
+     [echo] Targets:
+     [echo]     server:         Runs the web server and prints the IP-address.
+     [echo]
+     [echo]     build:          Builds the web server, and makes it ready to be                                                  run
+     [echo]     clean:          Removes all bytecode
+     [echo]     help:           Prints this message
+     [echo]
+     [echo]     build-src:      Builds the web server from source
+     [echo]     prepare-build:  Prepares a build directory
+     [echo]
+
+BUILD SUCCESSFUL
+Total time: 0 seconds
+[sverre@llama05:...ex9-afl/kode2]$ ant server
+Buildfile: build.xml
+
+prepare-build:
+    [mkdir] Created dir: /users/sverre/dDist/repo/uge2/ex9-afl/kode2/build
+
+build-src:
+    [javac] Compiling 7 source files to /users/sverre/dDist/repo/uge2/ex9-afl/ko                                                 de2/build
+    [javac] Note: /users/sverre/dDist/repo/uge2/ex9-afl/kode2/src/WebServerThrea                                                 d.java uses unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
+
+build:
+
+server:
+     [java] WebServer Started!
+     [java] Contact this server on the IP address 10.11.82.5:40404
+^Z
+[1]+  Stopped                 ant server
+
+[sverre@llama05:...ex9-afl/kode2]$ bg
+[1]+ ant server &
+
+[sverre@llama05:...ex9-afl/kode2]$ curl 10.11.82.5:40404/Bank/1/getAccount?name=derp
+     [java] Connection from /10.11.82.5:37156
+     [java] Debug: Received and parsed Request-Line:
+     [java]    GET /Bank/1/getAccount?name=derp HTTP/1.1
+     [java] Debug: <class>[<object>].<method>():
+     [java]    Bank[1].getAccount()
+     [java] argument(name;parameter) = (name;derp)
+<!DOCTYPE html><html><head><title>HTTP Server in java</title></head><body>derp</ 
+
+[sverre@llama05:...ex9-afl/kode2]$ curl 10.11.82.5:40404/Account/derp/getBalance                                                 
+     [java] Connection from /10.11.82.5:37157
+     [java] Debug: Received and parsed Request-Line:
+     [java]    GET /Account/derp/getBalance HTTP/1.1
+     [java] Debug: <class>[<object>].<method>():
+     [java]    Account[derp].getBalance()
+<!DOCTYPE html><html><head><title>HTTP Server in java</title></head><body>0.0</b                                                 
+
+[sverre@llama05:...ex9-afl/kode2]$ curl 10.11.82.5:40404/Account/derp/deposit?amount=5
+     [java] Connection from /10.11.82.5:37158
+     [java] Debug: Received and parsed Request-Line:
+     [java]    GET /Account/derp/deposit?amount=5 HTTP/1.1
+     [java] Debug: <class>[<object>].<method>():
+     [java]    Account[derp].deposit()
+     [java] argument(name;parameter) = (amount;5)
+<!DOCTYPE html><html><head><title>HTTP Server in java</title></head><body>null</body></html>
+
+[sverre@llama05:...ex9-afl/kode2]$ curl 10.11.82.5:40404/Account/derp/getBalance
+     [java] Connection from /10.11.82.5:37159
+     [java] Debug: Received and parsed Request-Line:
+     [java]    GET /Account/derp/getBalance HTTP/1.1
+     [java] Debug: <class>[<object>].<method>():
+     [java]    Account[derp].getBalance()
+<!DOCTYPE html><html><head><title>HTTP Server in java</title></head><body>5.0</body></html>
+
+[sverre@llama05:...ex9-afl/kode2]$ curl 10.11.82.5:40404/Account/derp/withdraw?amount=10
+     [java] Connection from /10.11.82.5:37163
+     [java] Debug: Received and parsed Request-Line:
+     [java]    GET /Account/derp/withdraw?amount=10 HTTP/1.1
+     [java] Debug: <class>[<object>].<method>():
+     [java]    Account[derp].withdraw()
+     [java] argument(name;parameter) = (amount;10)
+<!DOCTYPE html><html><head><title>HTTP Server in java</title></head><body>null</body></html>
+
+[sverre@llama05:...ex9-afl/kode2]$ curl 10.11.82.5:40404/Account/derp/getBalance
+     [java] Connection from /10.11.82.5:37164
+     [java] Debug: Received and parsed Request-Line:
+     [java]    GET /Account/derp/getBalance HTTP/1.1
+     [java] Debug: <class>[<object>].<method>():
+     [java]    Account[derp].getBalance()
+<!DOCTYPE html><html><head><title>HTTP Server in java</title></head><body>-5.0</body></html>
+
+[sverre@llama05:...ex9-afl/kode2]$ curl 10.11.82.5:40404/Account/derp/getname
+     [java] Connection from /10.11.82.5:37165
+     [java] Debug: Received and parsed Request-Line:
+     [java]    GET /Account/derp/getname HTTP/1.1
+     [java] Debug: <class>[<object>].<method>():
+     [java]    Account[derp].getname()
+<!DOCTYPE html><html><head><title>HTTP Server in java</title></head><body>The requested function wasn't found!The defined functions are:getName(), getBalance(), deposit(), withdraw(), </body></html>
+
+[sverre@llama05:...ex9-afl/kode2]$ curl 10.11.82.5:40404/Account/derp/getName
+     [java] Connection from /10.11.82.5:37166
+     [java] Debug: Received and parsed Request-Line:
+     [java]    GET /Account/derp/getName HTTP/1.1
+     [java] Debug: <class>[<object>].<method>():
+     [java]    Account[derp].getName()
+<!DOCTYPE html><html><head><title>HTTP Server in java</title></head><body>derp</body></html>
+
+[sverre@llama05:...ex9-afl/kode2]$ fg
+ant server
+^C
+[sverre@llama05:...ex9-afl/kode2]$ exit

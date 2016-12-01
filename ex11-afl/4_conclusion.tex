@@ -1,0 +1,14 @@
+\section*{Conclusion}
+Vores implementation virker ifølge vores JUnit-test.
+
+Vi har ikke testet situationer, hvor beskeder blander sig mellem typerne:
+MMJoin, MMPayload og MMLeave.
+Men vi mener at MMJoin og MMPayload bliver ordnet korrekt, selv ved 'utidige'
+MMJoins.
+
+Vores performance-tests viser at fifo generelt er meget hurtigere end total.
+
+Derudover er vores performancetest mangelfuld, da det ikke er lykkes os at få
+nok datapunkter ved multicast af 100 beskeder til en egentlig analyse.
+
+

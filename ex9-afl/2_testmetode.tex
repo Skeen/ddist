@@ -1,0 +1,27 @@
+For at teste koden kan man starte serveren via WebServer klassen og sende
+kommandoer til den med en web browser.
+
+Data opretholdes kun i serverens levetid.
+
+En test kan bestå af eksempelvis følgende Requests-URI\footnote{De listede strenge skal sættes efter \proc{url}'en, hvis testet i en browser, der har peget sig ind på serveren.}:
+\begin{verbatim}
+   /Bank/1/getAccount?name=derp
+   /Account/derp/getBalance?
+   
+   /Account/derp/deposit?amount=5
+   /Account/derp/getBalance
+   
+   /Account/derp/withdraw?amount=10
+   /Account/derp/getBalance
+   
+   /Account/derp/getName
+\end{verbatim}
+   
+Hvis man for eksempel vil indsætte 500 til Jimmy's konto, kalder man
+\verb+getAccount(jimmy)+ ved
+\begin{verbatim}/Bank/1/getAccount?name=jimmy\end{verbatim} og
+bruger resultatet som \verb+<Object>+ til \verb+deposit(500)+, hvilket således
+bliver:
+\begin{verbatim}/Account/<Object>/deposit?amount=500\end{verbatim}
+
+I tilfælde af at en konto bliver efterspurgt via \verb+getAccount+, men ikke eksisterer, vil en konto på det navn blive oprettet med et kontobeløb på 0.0.

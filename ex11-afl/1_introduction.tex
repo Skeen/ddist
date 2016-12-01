@@ -1,0 +1,159 @@
+\section*{Introduction}
+
+I denne opgave skal vi lave en ny implementation af MulticastQueue.java
+interfacet, som vi har fået udleveret.
+
+Den implementation skal bruge 'TOTAL delivery order', dvs. at alle beskeder
+skal ses i samme orden hos alle peers.
+Det skal desuden være distribureret, så der ikke findes en permanent server.
+
+\subsection*{Details}
+Vi har baseret os på en MulticastQueueFifoOnly fra sidste uge, men introduceret
+nogle ændringer\footnote{Vi har foretaget nogle små refaktoriseringer i den
+oprindelige kode så at alle nestede klasser nu er rykket ud som seperate
+klasser dog med package local access til de nødvendige feltværdier i vores
+MulticastQueue. 
+
+Dette inkluderer en række MulticastMessages og en SenderThread. 
+
+Vi har derudover ekstrakteret en ReceivingThread, som tidligere var indeholdt i
+MulticastQueuens run-metode.
+
+Begge trådene bliver nu started fra MulticastQueuens run-metode.}
+, og vi kalder nu vores implementation af MulticastQueue for
+MulticastQueueTotal.
+
+
+Vi har tilføjet klasserne TimestampedMessage og AcknowledgeMessage, som
+dekorerer MulticastMessage med en ekstra afsender og et tidsstempel.
+Dvs. de nye klasser er sådan set blot 'wrappers' til (en enkelt)
+MulticastMessage og udvider blot med information om den lokale process' logiske
+clock.
+
+Det vi gør i SenderThread er at wrappe den MulticastMessagePayload, der
+alligevel sendes her, ind i en TimestampedMessage, således at processor, der
+modtager beskeden, har en fornemmelse af beskedens placering mht. logisk tid.
+
+Desuden inkrementeres den lokale clock efter kontrakt med logical clock.
+
+Det er således i ReceiverThread at vi håndterer den tidsstemplede besked. \\
+
+Ved modtagelse af en tidsstemplet besked, opdaterer processen sin viden om den
+logiske clock, incrementerer den lokale clock og afsender en acknowledgeMessage
+med samme besked men med nyt timestamp til alle. \\
+
+Hvis den modtagne besked i forvejen er en AcknowledgeMessage, afsendes en
+AcknowledgeMessage selvfølgelig ikke.
+
+I stedet for tjekker vi om den message, der har den tidligst optagne
+tidsstempel, er blevet besvaret med en AcknowledgeMessages fra samtlige
+forbundne peers\footnote{Vi tæller også os selv med som en forbunden peer.}. 
+Hvis det er tilfældet overlader vi denne besked til pendingGets, der tillader
+applicationen at hente beskeden, samt alle efterfølgende beskeder, der også
+opfylder samme krav.
+
+\subsubsection*{Grunden til at det vil virke}
+Vi ved fra FifoOnlyQueuen at det er MulticastMessage (MM) -Payload,
+-Leave og -Join, der bliver multicastet til alle. 
+Dvs. hvis der er 4 peers, bliver fx MMPayload modtaget 4 gange, en gang for
+hver peer.
+
+Da vi ved at for hver af de 4 modtagne messages vil en AcknowledgeMessage blive
+udsendt bagefter (til alle), og vi ved at først når hver peer har modtaget alle
+(4) acknowledgeMessages kan applicationen modtage den relaterede besked.
+
+Dermed er det gældende at alle peers har acknowledged enhver multicasted besked,
+der modtages i en vilkårlig application.
+
+Tilbage er kun rækkefølgen af beskeder, men disse er sorteret efter et
+tidsstempel i den logiske clock.
+I det sjældne tilfælde at to hændelser sker på samme tid, sorterer vi efter 
+hvilken process at hændelsen sker ved. \\
+
+Rækkefølgen er altså ens, så længe kontrakterne omkring logical clock er
+vedligeholdt.
+
+\subsubsection*{Grunden til at det ikke vil virke}
+Efter afsendelse af AcknowledgeMessages kan, kan der muligvis joine nye peers,
+som ikke afsender nogen AcknowledgeMessage, da de ikke kender til den
+relaterede besked.
+
+Dette vil betyde at alle de peers, der forbinder til den nye peer før de får nok
+acknowledgeMessages til en besked de modtog før den nye peer joinede, ikke
+mere vil modtage nogen beskeder, da de vil blive ved med at vente på
+acknowledgeMessages.
+
+Grunden til at dette muligvis er et problem er at hver peer altid venter på
+acknowledgeMessages fra alle de peers den er forbundet til (inkl. den selv),
+og denne liste af forbundne peers tilføjes med den nye peer ved dens join.
+Den nye peer vil nok ikke acknowledge i det tilfælde, da den ikke ved noget
+om den besked den 'burde' acknowledge.
+
+Dette har vi ikke testet.
+
+\subsection*{Points and classes}
+
+
+\subsubsection*{Design and code an implementation of the interface}
+Vi bruger 'logical clocks' til ordning af beskeder, således at en peer først
+kan levere en besked til sin klient, efter den har koordineret dette med de
+andre peers.
+
+Se tidligere afsnit 'Details' for yderligere forklaringer.
+
+\subsubsection*{Develop a test which runs five instances of your implementation
+and simultanously and quickly puts lots of messages at all five peers}
+
+For at teste dette har vi lavet nogle automatiserede tests.
+
+Disse inkluderer tests på funktionaliteten af VectorClock og LamportClock,
+tests af sammenligning af forskellige TimestampedMessages.
+Vi tester også en session med en enkelt peer og sessioner med 2 og 3 peers, der
+inkluderer MMJoins og MMPayloads.
+
+Den sidste test er den mest omfattende og er sigtet efter at dække opgaven: at
+teste rækkefølgen af beskeder modtaget ved 5 forskellig peers.
+
+Alle tests kan køres på en gang ved at skrive \verb+ant junit+ fra folderen,
+hvor filen build.xml ligger.
+
+
+Den mest omfattende test starter 5 peers op på den lokale pc via forskellige
+porte.
+
+
+Vi har ikke testet situationer, hvor peers kan joine undervejs i en session med
+payLoadMessages.
+
+\subsubsection*{Develop a benchmark run which compares the running of TOTAL vs
+FIFO}
+MulticastQueuePerformanceTest klassen laver en sammenligning af
+hastighed med FifoOnly.
+Testen udføres ved at køre \verb+ant testP+ fra samme folder som filen
+build.xml befindersig i.
+
+Denne test gør følgende. 
+
+Først initialiseres netværket ved at en peer creater gruppen og modtager sin
+MMJoin.
+Dernæst tilføjes de resterende peers, for at komme op på \id{x} antal peers
+totalt.
+Hver gang en ny peer joiner, ventes der på at peers i netværket modtager en
+MMJoin.
+
+Dernæst er selve testen klar til at begynde.
+Vi skiftes mellem alle peers til at sende en besked indtil alle 100 beskeder er
+afsendt. 
+Dernæst skiftes mellem alle peers til at modtage indtil samtlige peers har
+modtaget alle 100 beskeder.
+
+Vi måler tiden før testen begynder og efter testen er slut vha.
+\id{System.currentTimeMillis()}
+
+Dette tillader os at undersøge forholdet mellem antallet af beskeder, der
+holdes konstant på 100, og antallet af peers.
+Og om total-ordnede multicast er anderledes end fifo-ordnede multicast mht.
+dette forhold.
+
+Vi forventer at Totalt ordnet multicast kører langtsomt i forhold til Fifo 
+da, der bruges flere beskeder, så som AcknowledgeMessage.

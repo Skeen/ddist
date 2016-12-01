@@ -1,0 +1,14 @@
+Vores server kører multitrådet. 
+WebServer accepterer sockets og overgiver disse til WebServerThread, hvor de
+bliver behandlet.
+
+WebServerThread parser request fra socketen, finder de relevante resourcer og
+svarer med disse.
+
+Koden er designed ifm. http \rfc.
+Der bruges \rfcb ~ved pdf indhold.
+
+Serveren læser Simple-Request (GET) og svarer med et minimalt Full-Response,
+ifm. \rfc ~sektion 4.1, hvilket inkluderer Status-Line og Entity-Body.
+
+Se eventuelt koden for dybtegående forklaringer.

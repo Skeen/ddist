@@ -1,0 +1,62 @@
+<!-- Build file for the latex handin
+
+   This source code is provided WITHOUT ANY WARRANTY either 
+   expressed or implied. You may study, use, modify, and 
+   distribute it for non-commercial purposes. 
+-->
+<project name="Latex" default="help" basedir=".">
+    <property name="source-directory" value="."/>
+    <property name="output-directory" value="."/>
+    <property name="include-directory" value="kode"/>
+    <property name="report" value="report.pdf"/>
+    <property name="handin-archive" value="handin.zip"/>
+
+    <target name="help">
+        <echo>
+Latex build management.
+Targets: 
+    help:           Prints this message
+    build:          Builds the pdf, cleans up, and moves the pdf to a subfolder
+    build-pdf:      Builds the pdf
+    clean:          Removes all the garbage (temp files)
+    move:           Moves the pdf file to a subfolder
+    prepare-build:  Prepares the output folder.
+    handin:         Creates an archive holding both ${report} and ${kode}
+        </echo>
+    </target>
+
+    <target name="build" depends="build-pdf, move, clean"/>
+
+    <target name="build-pdf" depends="prepare-build">
+        <exec executable="pdflatex">
+            <arg value="-shell-escape"/>
+            <!--arg value="-synctex=-1"/-->
+            <arg value="report.tex"/>
+        </exec>
+    </target>
+
+    <target name="clean">
+        <delete>
+            <fileset dir="${source-directory}" includes="**/*.out"/>
+            <fileset dir="${source-directory}" includes="**/*.log"/>
+            <fileset dir="${source-directory}" includes="**/*.aux"/>
+            <fileset dir="${source-directory}" includes="**/*.synctex"/>
+        </delete>
+    </target>
+
+    <target name="move" depends="prepare-build">
+        <move todir="${output-directory}" >
+            <fileset dir="${source-directory}">
+                <include name="*.pdf"/>
+            </fileset>
+        </move>
+    </target>
+
+    <target name="prepare-build">
+        <mkdir dir="${output-directory}"/>
+    </target>
+
+    <target name="handin" depends="build">
+            <zip destfile="${handin-archive}" basedir="${source-directory}" includes="${report},${include-directory}/**"/>
+    </target>
+</project>

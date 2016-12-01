@@ -1,0 +1,5 @@
+Testing the time of sending 50 messages and then for each peer receive them all
+7 peers:		FIFO: 160 ms.		
+
+Testing the time of sending 50 messages and then for each peer receive them all
+7 peers:		FIFO: 141 ms.		

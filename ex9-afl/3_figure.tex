@@ -1,0 +1,56 @@
+\tikzstyle{decision} = [diamond, draw, fill=blue!20,
+    text width=4.8em, text badly centered, node distance=2.7cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20,
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{blockwide} = [rectangle, draw, fill=blue!20,
+    text width=10em, text centered, node distance=1.4cm, rounded corners, minimum height=2em]
+\tikzstyle{line} = [draw, very thick, color=black!50, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3.5cm,
+    minimum height=2.4em]
+\tikzstyle{block2} = [rectangle, draw, fill=red!20,
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{case} = [near start, color=black]
+
+\begin{tikzpicture}[scale=2, node distance = 3.5cm, auto]
+
+    % Place nodes
+    \node [cloud] (init) 
+            {Server Method Dispatch};
+    \node [blockwide, below of=init] (intro)
+            {Tokenize URI-Request };
+    \node [decision, below of=intro] (gotClass) 
+            {Does the JVM recognize the \id{class}?};
+    \node [cloud, below left of=gotClass] (error) 
+            {error};
+    \node [block, right of=gotClass] (yClass) 
+            {\texttt{Class} variable stored};
+    \node [decision, below of=yClass] (gotMethod) 
+            {Do the \texttt{Class} declare the \id{method}?};
+    \node [block, right of=gotMethod] (yMethod) 
+            {\texttt{Method} variable stored};
+    \node [decision, below of=yMethod] (gotMapping) 
+            {Is the \texttt{class} mapped by \id{object}?};
+    \node [block, below of=gotMapping] (yMapping) 
+            {\texttt{Object} retrieved from map and stored};
+    \node [block, left of=yMapping] (parse) 
+            {Parse \id{arguments}};
+    \node [block, left of=parse] (invoke) 
+            {Invoke \texttt{Method} on \texttt{Object} with \texttt{Arguments}};
+    \node [block2, left of=invoke] (fin) 
+            {Return \id{result} from the method call};
+
+    % Draw edges
+    \path [line] (init) -- (intro);
+    \path [line] (intro) -- (gotClass);
+    \path [line] (gotClass) -- node [case] {No} (error);
+    \path [line] (gotClass) -- node [case] {Yes} (yClass);
+    \path [line] (yClass) -- (gotMethod);
+    \path [line] (gotMethod) -- node [case] {No} (error);
+    \path [line] (gotMethod) -- node [case] {Yes} (yMethod);
+    \path [line] (yMethod) -- (gotMapping);
+    \path [line] (gotMapping) -| node [case] {No} (error);
+    \path [line] (gotMapping) -- node [case] {Yes} (yMapping);
+    \path [line] (yMapping) -- (parse);
+    \path [line] (parse) -- (invoke);
+    \path [line] (invoke) -- (fin);
+\end{tikzpicture}

@@ -1,0 +1,73 @@
+[sverre@llama14:...]$ ls
+build.xml  src
+[sverre@llama14:...]$ ant
+Buildfile: build.xml
+
+help:
+     [echo]
+     [echo] WebServer build management.
+     [echo] Targets:
+     [echo]     server:         Runs the webserver and prints the IP-address.
+     [echo]     test-www:       Starts the webserver in the background and points
+     [echo]                     a browser to it.
+     [echo]     test-firefox:   As test-www but uses firefox.
+     [echo]                     Use this if test-www fails
+     [echo]
+     [echo]     build:          Builds the webserver, and makes it ready to be run
+     [echo]     clean:          Removes all bytecode
+     [echo]     help:           Prints this message
+     [echo]
+     [echo]     build-src:      Builds the webserver from source
+     [echo]     prepare-build:  Prepares a build directory
+     [echo]     prepare-res:    Makes sure the resources are downloaded
+     [echo]                     and extracted from the tar archive
+     [echo]     download-res:   Downloads the resources from course website
+     [echo]     extract-res:    Extracts the resources to FilesToBeServed/
+     [echo]
+
+BUILD SUCCESSFUL
+Total time: 0 seconds
+
+[sverre@llama14:...]$ ant test-firefox
+Buildfile: build.xml
+
+prepare-build:
+    [mkdir] Created dir: /[...]/kode/build
+
+build-src:
+    [javac] Compiling 2 source files to /[...]/kode/build
+
+download-res:
+     [echo]  Downloading the resources as necessary
+     [exec] --2012-01-26 22:53:26--  http://www.cs.au.dk/~jbn/dDist2011/FilesToBeServed.tar.gz
+     [exec] Resolving www.cs.au.dk... 130.225.12.1
+     [exec] Connecting to www.cs.au.dk|130.225.12.1|:80... connected.
+     [exec] HTTP request sent, awaiting response... 200 OK
+     [exec] Length: unspecified [application/x-gzip]
+     [exec] Saving to: `FilesToBeServed.tar.gz'
+     [exec]
+     [exec]      0K .......... .......... .......... .......... .......... 13.2M
+     [exec]     50K .......... .......... .......... .......... .......... 19.0M
+[...]
+     [exec]   1250K .......... .......... .......... .......... .......... 40.4M
+     [exec]   1300K .......... ......                                      75.4M=0.03s
+     [exec]
+     [exec] 2012-01-26 22:53:26 (40.5 MB/s) - `FilesToBeServed.tar.gz' saved [1347964]
+     [exec]
+
+extract-res:
+     [echo]  Untaring the resources as necessary
+
+prepare-res:
+
+build:
+
+run-bg:
+     [echo]  Running the server in the background. Please stop it manually, when ready.
+
+test-firefox:
+     [echo]  Leaving Ant. The browser will start now.
+
+BUILD SUCCESSFUL
+Total time: 1 second
+[sverre@llama14:...]$ 

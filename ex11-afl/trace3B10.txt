@@ -1,0 +1,11 @@
+Testing the time of sending 10 messages and then for each peer receive them all
+5 peers:		FIFO: 99 ms.		TOTAL: 6724 ms.
+5 peers:		FIFO: 49 ms.		TOTAL: 6633 ms.
+7 peers:		FIFO: 101 ms.		
+
+Testing the time of sending 10 messages and then for each peer receive them all
+1 peers:		FIFO: 2 ms.		TOTAL: 6 ms.
+1 peers:		FIFO: 1 ms.		TOTAL: 6 ms.
+3 peers:		FIFO: 12 ms.		TOTAL: 449 ms.
+3 peers:		FIFO: 23 ms.		TOTAL: 381 ms.
+5 peers:		FIFO: 32 ms.		

@@ -1,0 +1,41 @@
+\title{\huge Distribuerede Systemer \\
+       \small Afleveringsopgave - 1 }
+\author{Hold: DA4; Gruppe: 2\\ \\
+        \href{mailto:skeen@cs.au.dk}{Emil Madsen - 20105376}\\
+        \href{mailto:emray@cs.au.dk}{Rasmus - 20105109}\\
+        \href{mailto:sverre@cs.au.dk}{Sverre - 20083549}
+       }
+\date{\today}
+
+\maketitle
+
+\hrule
+
+\section*{Overblik}
+
+Vi har implementeret en delmængde af \http\;i Java ved hjælp af java sockets og
+testet det med udgangspunkt i \rfc.
+
+Denne rapport prøver at dække det følgende:
+
+Et overblik over vores design, implementation og i særdeleshed hvordan det
+relaterer til \http-specifikationen.
+
+\section*{Design}
+ \input{ 1_design.tex }
+\section*{Instruktioner}
+ \input{ 2_instructions.tex }
+
+\newpage
+\section*{Appendix A \\
+    \small Et print af vores Ant build script, 
+    der viser nogle af mulighederne: 
+}
+\VerbatimInput[frame=leftline,numbers=left,numbersep=3pt,fontsize=\footnotesize]{normal-run.txt}
+
+%% Uncommented as it could just be read in the rfc.
+%\newpage
+%\section*{Appendix B \\
+%    \small Udvalgte udtag af \rfc, der prøver at fange den fulde beskrivelse af en server respons (BNF). }
+%
+%\VerbatimInput[frame=leftline,numbers=left,numbersep=3pt,fontsize=\small]{ AppB_rfc1945_udpluk.txt }

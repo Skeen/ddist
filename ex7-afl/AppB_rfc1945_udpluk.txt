@@ -1,0 +1,185 @@
+2.2  Basic Rules 
+[...] 
+   HTTP/1.0 defines the octet sequence CR LF as the end-of-line marker 
+   for all protocol elements except the Entity-Body (see Appendix B for 
+   tolerant applications). 
+[...] 
+3.  Protocol Parameters 
+3.1  HTTP Version 
+[...] 
+   This document defines both the 0.9 and 1.0 versions of the HTTP 
+   protocol. Applications sending Full-Request or Full-Response 
+   messages, as defined by this specification, must include an HTTP- 
+   Version of "HTTP/1.0". 
+   HTTP/1.0 servers must: 
+      o recognize the format of the Request-Line for HTTP/0.9 and 
+        HTTP/1.0 requests; 
+      o understand any valid request in the format of HTTP/0.9 or 
+        HTTP/1.0; 
+      o respond appropriately with a message in the same protocol 
+        version used by the client. 
+[...] 
+3.3  Date/Time Formats 
+[...] 
+3.5  Content Codings 
+[...] 
+4.  HTTP Message 
+4.1  Message Types 
+   HTTP messages consist of requests from client to server and responses 
+   from server to client. 
+       HTTP-message   = Simple-Request           ; HTTP/0.9 messages 
+                      | Simple-Response 
+                      | Full-Request             ; HTTP/1.0 messages 
+                      | Full-Response 
+[...] 
+       Full-Response  = Status-Line              ; Section 6.1 
+                        *( General-Header        ; Section 4.3 
+                         | Response-Header       ; Section 6.2 
+                         | Entity-Header )       ; Section 7.1 
+                        CRLF 
+                        [ Entity-Body ]          ; Section 7.2 
+[...] 
+4.3  General Header Fields 
+[...] 
+       General-Header = Date                     ; Section 10.6 
+                      | Pragma                   ; Section 10.12 
+[...] 
+6.1  Status-Line 
+[...] 
+       Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF 
+[...] 
+6.1.1 Status Code and Reason Phrase 
+[...] 
+       Status-Code    = "200"   ; OK 
+                      | "201"   ; Created 
+                      | "202"   ; Accepted 
+                      | "204"   ; No Content 
+                      | "301"   ; Moved Permanently 
+                      | "302"   ; Moved Temporarily 
+                      | "304"   ; Not Modified 
+                      | "400"   ; Bad Request 
+                      | "401"   ; Unauthorized 
+                      | "403"   ; Forbidden 
+                      | "404"   ; Not Found 
+                      | "500"   ; Internal Server Error 
+                      | "501"   ; Not Implemented 
+                      | "502"   ; Bad Gateway 
+                      | "503"   ; Service Unavailable 
+                      | extension-code 
+       extension-code = 3DIGIT 
+       Reason-Phrase  = *<TEXT, excluding CR, LF>
+[...] 
+6.2  Response Header Fields 
+[...] 
+       Response-Header = Location                ; Section 10.11 
+                       | Server                  ; Section 10.14 
+                       | WWW-Authenticate        ; Section 10.16 
+[...] 
+7.1  Entity Header Fields 
+[...] 
+       Entity-Header  = Allow                    ; Section 10.1 
+                      | Content-Encoding         ; Section 10.3 
+                      | Content-Length           ; Section 10.4 
+                      | Content-Type             ; Section 10.5 
+                      | Expires                  ; Section 10.7 
+                      | Last-Modified            ; Section 10.10 
+                      | extension-header 
+       extension-header = HTTP-header 
+[...] 
+7.2  Entity Body 
+[...] 
+       Entity-Body    = *OCTET 
+[...] 
+7.2.1 Type 
+[...] 
+       entity-body := Content-Encoding( Content-Type( data ) ) 
+[...] 
+10.  Header Field Definitions
+[...] 
+10.1  Allow 
+[...] 
+       Allow          = "Allow" ":" 1#method 
+    Example of use: 
+       Allow: GET, HEAD 
+[...] 
+10.3  Content-Encoding 
+[...] 
+       Content-Encoding = "Content-Encoding" ":" content-coding 
+   Content codings are defined in Section 3.5. An example of its use is 
+       Content-Encoding: x-gzip 
+[...] 
+10.4  Content-Length 
+[...] 
+       Content-Length = "Content-Length" ":" 1*DIGIT 
+   An example is 
+       Content-Length: 3495 
+[...] 
+10.5  Content-Type 
+[...] 
+       Content-Type   = "Content-Type" ":" media-type 
+   Media types are defined in Section 3.6. An example of the field is 
+       Content-Type: text/html 
+[...] 
+10.6  Date 
+[...] 
+       Date           = "Date" ":" HTTP-date 
+   An example is 
+       Date: Tue, 15 Nov 1994 08:12:31 GMT
+[...] 
+10.7  Expires 
+[...] 
+       Expires        = "Expires" ":" HTTP-date 
+   An example of its use is 
+       Expires: Thu, 01 Dec 1994 16:00:00 GMT 
+[...] 
+10.8  From 
+[...] 
+       From           = "From" ":" mailbox 
+   An example is: 
+       From: webmaster@w3.org 
+[...] 
+10.9  If-Modified-Since 
+[...] 
+       If-Modified-Since = "If-Modified-Since" ":" HTTP-date 
+   An example of the field is: 
+       If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
+[...] 
+10.10  Last-Modified 
+[...] 
+       Last-Modified  = "Last-Modified" ":" HTTP-date 
+   An example of its use is 
+       Last-Modified: Tue, 15 Nov 1994 12:45:26 GMT
+[...] 
+10.11  Location 
+[...] 
+       Location       = "Location" ":" absoluteURI 
+   An example is 
+       Location: http://www.w3.org/hypertext/WWW/NewLocation.html 
+10.12  Pragma 
+[...] 
+       Pragma           = "Pragma" ":" 1#pragma-directive 
+       pragma-directive = "no-cache" | extension-pragma 
+       extension-pragma = token [ "=" word ] 
+[...] 
+10.13  Referer
+[...] 
+       Referer        = "Referer" ":" ( absoluteURI | relativeURI ) 
+   Example: 
+       Referer: http://www.w3.org/hypertext/DataSources/Overview.html 
+[...] 
+10.14  Server 
+[...] 
+       Server         = "Server" ":" 1*( product | comment ) 
+   Example: 
+       Server: CERN/3.0 libwww/2.17 
+[...] 
+10.15  User-Agent 
+[...] 
+       User-Agent     = "User-Agent" ":" 1*( product | comment ) 
+   Example: 
+       User-Agent: CERN-LineMode/2.15 libwww/2.17b3 
+[...] 
+10.16  WWW-Authenticate 
+[...] 
+       WWW-Authenticate = "WWW-Authenticate" ":" 1#challenge
+[...]
